@@ -1,118 +1,80 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, {useCallback, useState} from 'react';
+import {Image, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Dropdown} from './src/components/Dropdown';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+export const App = () => {
+  const RightIcon = useCallback(
+    () => (
+      <Image
+        source={{
+          uri: 'https://cdn-icons-png.flaticon.com/512/120/120890.png',
+        }}
+        style={{width: 20, height: 20}}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
+    ),
+    [],
+  );
+
+  const ItemSeparatorComponent = useCallback(
+    () => <View style={{height: 1, backgroundColor: '#DDD'}} />,
+    [],
+  );
+
+  const [selectedValue, setSelectedValue] = useState<number | null>(null);
+  const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+  return (
+    <GestureHandlerRootView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1}}>
         <View
           style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
+            flex: 1,
+            padding: 16,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+          <Dropdown
+            data={data}
+            renderButton={() => (
+              <View style={{padding: 10}}>
+                <Text>{selectedValue ?? 'Select a value'}</Text>
+              </View>
+            )}
+            buttonContainerStyle={{
+              width: '50%',
+              alignItems: 'center',
+              borderWidth: 1,
+              borderRadius: 5,
+              paddingHorizontal: 10,
+              borderColor: '#DDD',
+            }}
+            listItemContainerStyle={{
+              borderWidth: 1,
+              borderRadius: 5,
+              borderColor: '#DDD',
+            }}
+            renderItem={({item, onSelectedItem}) => (
+              <TouchableOpacity
+                onPress={() => {
+                  setSelectedValue(item);
+                  onSelectedItem();
+                }}
+                style={{
+                  padding: 10,
+                  backgroundColor: '#FFF',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text>{item}</Text>
+              </TouchableOpacity>
+            )}
+            ItemSeparatorComponent={ItemSeparatorComponent}
+            maxHeight={300}
+            showsVerticalScrollIndicator
+            rightIcon={RightIcon}
+          />
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
-}
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-export default App;
+};
