@@ -1,3 +1,7 @@
+# Preview
+
+https://github.com/JeanSilvany/dropdown/assets/73763375/2282bd55-54ee-4d32-b860-54f49acea51b
+
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Getting Started
